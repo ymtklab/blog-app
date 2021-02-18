@@ -1,0 +1,15 @@
+extends ../layout 
+
+block content
+  h1 #{title}
+  p.text-danger #{err}
+  form(method="post" action="/users/add")
+    div.form-group.mt-5
+      label(for="name") 名前： 
+      input(type="text" name="name" id="name").form-control
+    div.form-group.mt-5
+      label(for="pass") パスワード：
+      input(type="text" name="pass" id="pass").form-control
+    button(type="submit").btn.btn-primary.mt-3 ユーザー登録
+    div.my-5
+      a(href="/users/login") ログイン

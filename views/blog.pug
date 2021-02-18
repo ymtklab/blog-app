@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  - var isMine = login.userId === blog.createdBy
+  if isMine
+    div.text-end.my-5
+      a(href=`/blogs/${blog.blogId}/edit`).btn.btn-warning ブログの編集
+  - var isAdmin = login.username === 'admin'
+  if isAdmin 
+    form(method="post" action=`/blogs/${blog.blogId}?delete=1`)
+      button(type="submit").btn.btn-danger このブログを削除する 
+  h1.my-5 #{blog.blogTitle}
+  h3.text-end #{blog.user.username}
+  p.border.border-info.fs-6.lh-lg #{blog.blogText}

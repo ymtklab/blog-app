@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  p.text-end.my-3 #{login.username} でログイン中
+  form(method="post" action="/blogs")
+    div.form-group.mt-5
+      label(for="blogTitle") ブログタイトル：
+      input(type="text", name="blogTitle").form-control
+    div.form-group.mt-5
+      label(for="blogText") 本文：
+      textarea(name="blogText", rows="15").form-control
+    button(type="submit").btn.btn-info.mt-5 ブログ作成
