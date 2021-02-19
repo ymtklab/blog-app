@@ -21,12 +21,6 @@ router.post('/add', (req, res, next) => {
     } else{
       res.redirect('/');
     }
-  })
-  .catch((err) => {
-    res.render('users/add', {
-      title: 'ユーザー登録',
-      err: 'そのユーザー名、またはパスワードは使用できません'
-    });
   });
 });
 
