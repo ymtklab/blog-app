@@ -1,10 +1,11 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
+const moment = require('moment-timezone');
 var check = require('./check'); 
-var isAdmin = require('./isAdmin');
 var Blog = require('../models/blog');
 var User = require('../models/user');
+var Comment = require('../models/comment');
 
 // 新規投稿
 router.get('/new', (req, res, next) => {
@@ -41,9 +42,25 @@ router.get('/:blogId', (req, res, next) => {
       blogId: req.params.blogId
     }
   }).then((blog) => {
-    res.render('blog', {
-      login: login,
-      blog: blog
+    Comment.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['userId','username']
+        }],
+      where: {
+        blogId: blog.blogId
+      },
+      order: [['updatedAt', 'DESC']]
+    }).then((comments) => {
+      comments.forEach((comment) => {
+        comment.formattedCreatedAt = moment(comment.updatedAt).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH時mm分ss秒');
+      });
+      res.render('blog', {
+        login: login,
+        blog: blog,
+        comments: comments
+      });
     });
   });
 });
@@ -80,7 +97,7 @@ router.post('/:blogId', (req, res, next) => {
       blogId: req.params.blogId
     }
   }).then((blog) => {
-    if (blog && (isMine(req, blog) || isAdmin(req))) {
+    if (blog && isMine(req, blog)) {
       if (parseInt(req.query.edit) === 1) {
         const updatedAt = new Date();
         blog.update({
@@ -93,9 +110,17 @@ router.post('/:blogId', (req, res, next) => {
           res.redirect(`/blogs/${blog.blogId}`);
         });
       } else if (parseInt(req.query.delete) === 1) {
-        blog.destroy().then(() => {
-          res.redirect('/');
-        });
+        Comment.findAll({
+          where: {
+            blogId: blog.blogId
+          }
+        }).then((comments) => {
+          comments.map((c) => c.destroy())
+        }).then(() => {
+          blog.destroy().then(() => {
+            res.redirect('/');
+          });
+        })
       } else {
         const err = new Error('不正なリクエストです');
         err.status = 400;

@@ -22,6 +22,10 @@ const Comment = loader.database.define(
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      allowNull: false
     }
   },
   {
