@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var moment = require('moment-timezone');
-var check = require('./check');
+// var check = require('./check');
 var Blog = require('../models/blog');
 var User = require('../models/user');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  if (check(req, res)){ return };
+  // if (check(req, res)){ return };
   Blog.findAll({
     include: [
       {
