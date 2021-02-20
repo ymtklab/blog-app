@@ -2,14 +2,14 @@
 var express = require('express');
 var router = express.Router();
 const moment = require('moment-timezone');
-// var check = require('./check'); 
+var check = require('./check'); 
 var Blog = require('../models/blog');
 var User = require('../models/user');
 var Comment = require('../models/comment');
 
 // 新規投稿
 router.get('/new', (req, res, next) => {
-  // if (check(req, res)){ return };
+  if (check(req, res)){ return };
   res.render('new', {
     title: 'ブログ作成',
     login: req.session.login
