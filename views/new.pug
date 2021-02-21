@@ -3,6 +3,7 @@ extends layout
 block content
   p.text-end.my-3 #{login.username} でログイン中
   form(method="post" action="/blogs")
+    input(type="hidden" name="_csrf" value!=csrfToken)
     div.form-group.mt-5
       label(for="blogTitle") ブログタイトル：
       input(type="text", name="blogTitle").form-control

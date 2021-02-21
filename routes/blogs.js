@@ -2,21 +2,25 @@
 var express = require('express');
 var router = express.Router();
 const moment = require('moment-timezone');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 var check = require('./check'); 
 var Blog = require('../models/blog');
 var User = require('../models/user');
 var Comment = require('../models/comment');
 
-// 新規投稿
-router.get('/new', (req, res, next) => {
+// 新規投稿ページの表示
+router.get('/new', csrfProtection, (req, res, next) => {
   if (check(req, res)){ return };
   res.render('new', {
     title: 'ブログ作成',
-    login: req.session.login
+    login: req.session.login,
+    csrfToken: req.csrfToken()
   });
 });
 
-router.post('/', (req, res, next) => {
+// 新規投稿の処理
+router.post('/', csrfProtection, (req, res, next) => {
   const updatedAt = new Date();
   Blog.create({
     blogTitle: req.body.blogTitle,
@@ -29,7 +33,7 @@ router.post('/', (req, res, next) => {
 });
 
 // ブログの取得・表示
-router.get('/:blogId', (req, res, next) => {
+router.get('/:blogId', csrfProtection, (req, res, next) => {
   if (check(req, res)){ return };
   const login = req.session.login;
   Blog.findOne({
@@ -59,7 +63,8 @@ router.get('/:blogId', (req, res, next) => {
       res.render('blog', {
         login: login,
         blog: blog,
-        comments: comments
+        comments: comments,
+        csrfToken: req.csrfToken()
       });
     });
   });
@@ -67,10 +72,14 @@ router.get('/:blogId', (req, res, next) => {
 
 function isMine(req, blog) {
   return blog && parseInt(req.session.login.userId) === parseInt(blog.createdBy);
-}
+};
 
-// ブログの編集
-router.get('/:blogId/edit', (req, res, next) => {
+function isAdmin(req, blog) {
+  return blog && parseInt(req.session.login.userId) === 1;
+};
+
+// ブログの編集ページを表示
+router.get('/:blogId/edit', csrfProtection, (req, res, next) => {
   if (check(req, res)){ return };
   const login = req.session.login;
   Blog.findOne({
@@ -81,7 +90,8 @@ router.get('/:blogId/edit', (req, res, next) => {
     if (isMine(req, blog)) {
       res.render('edit', {
         login: login,
-        blog: blog
+        blog: blog,
+        csrfToken: req.csrfToken()
       });
     } else {
       const err = new Error('指定されたブログがない、または、編集する権限がありません');
@@ -91,13 +101,14 @@ router.get('/:blogId/edit', (req, res, next) => {
   });
 });
 
-router.post('/:blogId', (req, res, next) => {
+// ブログを編集・削除
+router.post('/:blogId', csrfProtection, (req, res, next) => {
   Blog.findOne({
     where: {
       blogId: req.params.blogId
     }
   }).then((blog) => {
-    if (blog && isMine(req, blog)) {
+    if (blog && isMine(req, blog) || isAdmin(req, blog)) {
       if (parseInt(req.query.edit) === 1) {
         const updatedAt = new Date();
         blog.update({

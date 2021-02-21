@@ -4,8 +4,11 @@ var router = express.Router();
 var User = require('../models/user');
 var Blog = require('../models/blog');
 var Comment = require('../models/comment');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 
-router.post('/:blogId/users/:userId/comments/new', (req, res, next) => {
+// コメントの投稿処理
+router.post('/:blogId/users/:userId/comments/new', csrfProtection, (req, res, next) => {
   const updatedAt = new Date();
   Comment.create({
     comment: req.body.comment,
@@ -19,12 +22,17 @@ router.post('/:blogId/users/:userId/comments/new', (req, res, next) => {
 
 function myComment(req, comment) {
   return comment && parseInt(req.session.login.userId) === parseInt(comment.userId);
-}
+};
 
-router.post('/:blogId/users/:userId/comments/:commentId', (req, res, next) => {
+function isAdmin(req, comment) {
+  return comment && parseInt(req.session.login.userId) === 1;
+};
+
+// コメントの削除処理
+router.post('/:blogId/users/:userId/comments/:commentId', csrfProtection, (req, res, next) => {
   if (parseInt(req.query.delete) === 1) {
     Comment.findByPk(req.params.commentId).then((comment) => {
-      if (myComment(req, comment)) {
+      if (myComment(req, comment) || isAdmin(req, comment)) {
         comment.destroy().then(() => {
           res.redirect(`/blogs/${req.params.blogId}`);
         });

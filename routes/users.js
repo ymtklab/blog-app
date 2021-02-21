@@ -1,20 +1,25 @@
 var express = require('express');
 const { route } = require('.');
 var router = express.Router();
+const bcrypt = require('bcrypt');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 var User = require('../models/user');
 
 /* GET users listing. */
-router.get('/add', function(req, res, next) {
+router.get('/add', csrfProtection, function(req, res, next) {
   res.render('users/add', {
     title: 'ユーザー登録',
-    err: ''
+    err: '',
+    csrfToken: req.csrfToken()
   });
 });
 
-router.post('/add', (req, res, next) => {
+router.post('/add', csrfProtection, (req, res, next) => {
+  const password = bcrypt.hashSync(req.body.pass, 10);
   User.create({
     username: req.body.name,
-    password: req.body.pass
+    password: password
   }).then((user) => {
     if (!user) {
       res.redirect('/users/add');
@@ -24,22 +29,24 @@ router.post('/add', (req, res, next) => {
   });
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/login', csrfProtection, (req, res, next) => {
   res.render('users/login', {
     title: 'ログイン',
-    content: ''
+    content: '',
+    csrfToken: req.csrfToken()
   });
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', csrfProtection, (req, res, next) => {
   User.findOne({
     where: {
-      username: req.body.name,
-      password: req.body.pass
+      username: req.body.name
     }
   }).then((user) => {
-    if (user !== null) {
+    let okpass = bcrypt.compareSync(req.body.pass, user.password);
+    if (user !== null && okpass) {
       req.session.login = user;
+      req.session.login.password = 'blog';
       res.redirect('/');
     } else {
       res.render('users/login', {
@@ -63,10 +70,15 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
+// 以下は削除する
 router.get('/show', (req, res, next) => {
   User.findAll().then((users) => {
     res.send(users);
   });
+});
+
+router.get('/session', (req, res, next) => {
+  res.send(req.session.login);
 });
 
 module.exports = router;

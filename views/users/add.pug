@@ -4,12 +4,18 @@ block content
   h1 #{title}
   p.text-danger #{err}
   form(method="post" action="/users/add")
+    input(type="hidden" name="_csrf" value!=csrfToken)
     div.form-group.mt-5
       label(for="name") 名前： 
       input(type="text" name="name" id="name").form-control
     div.form-group.mt-5
       label(for="pass") パスワード：
       input(type="text" name="pass" id="pass").form-control
-    button(type="submit").btn.btn-primary.mt-3 ユーザー登録
+    button(type="submit").btn.btn-success.mt-3 ユーザー登録
     div.my-5
       a(href="/users/login") ログイン
+    div.tyuui
+      h1 ※注意事項
+      p ユーザー登録に使うユーザー名、パスワードは他のサービスに使っているもの、または他のサービスのユーザー名やパスワードを推測されることのないものにしてください。
+      p (良い例)<br>ユーザー名：イニシャル、適当な名前<br>パスワード：適当な単語、適当な数字
+      p (悪い例)<br>ユーザー名：他のサービスのユーザー名(LINE、Googleなどのユーザー名)<br>パスワード：他のサービスのパスワード(LINE、Googleなどのパスワード)

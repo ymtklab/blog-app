@@ -3,6 +3,7 @@ extends layout
 block content
   h3.mt-5 ブログの編集
   form(method="post" action=`/blogs/${blog.blogId}?edit=1`)
+    input(type="hidden" name="_csrf" value!=csrfToken)
     div.form-group.mt-5
       label(for="blogTitle") ブログタイトル：
       input(type="text", name="blogTitle" value=blog.blogTitle).form-control
@@ -12,4 +13,5 @@ block content
     button(type="submit").btn.btn-warning.mt-5 ブログ編集
   h3.mt-5 危険な変更
   form(method="post" action=`/blogs/${blog.blogId}?delete=1`)
+    input(type="hidden" name="_csrf" value!=csrfToken)
     button(type="submit").btn.btn-danger このブログを削除する 
