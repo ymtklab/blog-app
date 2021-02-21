@@ -70,15 +70,4 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
-// 以下は削除する
-router.get('/show', (req, res, next) => {
-  User.findAll().then((users) => {
-    res.send(users);
-  });
-});
-
-router.get('/session', (req, res, next) => {
-  res.send(req.session.login);
-});
-
 module.exports = router;
