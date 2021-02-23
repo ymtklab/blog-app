@@ -1,5 +1,4 @@
 var express = require('express');
-const { route } = require('.');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const csrf = require('csurf');
@@ -10,22 +9,26 @@ var User = require('../models/user');
 router.get('/add', csrfProtection, function(req, res, next) {
   res.render('users/add', {
     title: 'ユーザー登録',
-    err: '',
+    errs: [],
     csrfToken: req.csrfToken()
   });
 });
 
 router.post('/add', csrfProtection, (req, res, next) => {
-  const password = bcrypt.hashSync(req.body.pass, 10);
+  const password = req.body.pass ? bcrypt.hashSync(req.body.pass, 10) : null;
   User.create({
     username: req.body.name,
     password: password
   }).then((user) => {
-    if (!user) {
-      res.redirect('/users/add');
-    } else{
-      res.redirect('/');
+    if (user) {
+      res.redirect('/users/login');
     }
+  }).catch(err => {
+    res.render('users/add', {
+      title: 'ユーザー登録',
+      errs: err.errors.map(e => e.message),
+      csrfToken: req.csrfToken()
+    });
   });
 });
 
@@ -51,10 +54,17 @@ router.post('/login', csrfProtection, (req, res, next) => {
     } else {
       res.render('users/login', {
         title: 'ログイン',
-        content: '名前かパスワードに問題があります。再度入力してください。'
+        content: '名前かパスワードに問題があります。再度入力してください。',
+        csrfToken: req.csrfToken()
         });
       }
-  });
+  }).catch(err => {
+    res.render('users/login', {
+      title: 'ログイン',
+      content: '名前かパスワードに問題があります。再度入力してください。',
+      csrfToken: req.csrfToken()
+      });
+  })
 });
 
 router.get('/logout', (req, res, next) => {

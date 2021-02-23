@@ -17,6 +17,11 @@ router.post('/:blogId/users/:userId/comments/new', csrfProtection, (req, res, ne
     updatedAt: updatedAt
   }).then((comment) => {
     res.redirect(`/blogs/${comment.blogId}`);
+  }).catch(err => {
+    res.render('error', {
+      message: 'コメントは255文字までにしてください',
+      returnurl: req.params.blogId
+    });
   });
 });
 

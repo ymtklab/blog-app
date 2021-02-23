@@ -1,6 +1,6 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  h2.text-danger #{message} 
+  h1.my-5
+    a(href=`/blogs/${returnurl}`) 戻る

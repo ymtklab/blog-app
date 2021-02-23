@@ -13,13 +13,28 @@ const User = loader.database.define(
     },
     username: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false
+      unique: {
+        msg: "その名前は使えません"
+      },
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "名前は必ず入力してください"
+        }
+      }
     },
     password: {
       type: Sequelize.STRING,
       unique: true,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "パスワードは必ず入力してください"
+        },
+        notNull: {
+          msg: "パスワードは必ず入力してください"
+        }
+      }
     }
   },
   {

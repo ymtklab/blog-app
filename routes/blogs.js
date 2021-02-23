@@ -15,7 +15,9 @@ router.get('/new', csrfProtection, (req, res, next) => {
   res.render('new', {
     title: 'ブログ作成',
     login: req.session.login,
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    message: '',
+    text: ''
   });
 });
 
@@ -23,12 +25,20 @@ router.get('/new', csrfProtection, (req, res, next) => {
 router.post('/', csrfProtection, (req, res, next) => {
   const updatedAt = new Date();
   Blog.create({
-    blogTitle: req.body.blogTitle,
+    blogTitle: req.body.blogTitle || '(タイトル未入力)',
     blogText: req.body.blogText,
     createdBy: req.session.login.userId,
     updatedAt: updatedAt
   }).then((blog) => {
     res.redirect('/');
+  }).catch(err => {
+    res.render('new', {
+      title: 'ブログ作成',
+      login: req.session.login,
+      csrfToken: req.csrfToken(),
+      message: 'タイトルは255文字までにしてください',
+      text: req.body.blogText
+    });
   });
 });
 
@@ -119,6 +129,11 @@ router.post('/:blogId', csrfProtection, (req, res, next) => {
           updatedAt: updatedAt
         }).then((blog) => {
           res.redirect(`/blogs/${blog.blogId}`);
+        }).catch(err => {
+          res.render('error', {
+            message: 'タイトルは255文字までにしてください',
+            returnurl: req.params.blogId
+          });
         });
       } else if (parseInt(req.query.delete) === 1) {
         Comment.findAll({

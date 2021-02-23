@@ -20,7 +20,6 @@ router.get('/', function(req, res, next) {
       blog.formattedCreatedAt = moment(blog.updatedAt).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH時mm分ss秒');
     });
     res.render('index', {
-      title: 'ブログ',
       login: req.session.login,
       blogs: blogs
     });
