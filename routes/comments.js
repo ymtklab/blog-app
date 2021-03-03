@@ -28,7 +28,7 @@ function myComment(req, comment) {
   return comment && parseInt(req.session.login.userId) === parseInt(comment.userId);
 };
 
-// コメントを削除するユーザーが監理者かチェック
+// コメントを削除するユーザーが管理者かチェック
 function isAdmin(req, comment) {
   return comment && parseInt(req.session.login.userId) === 1;
 };
