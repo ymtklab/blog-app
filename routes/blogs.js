@@ -42,7 +42,7 @@ router.post('/', csrfProtection, (req, res, next) => {
   });
 });
 
-// ブログの取得・表示
+// 各ブログの詳細表示
 router.get('/:blogId', csrfProtection, (req, res, next) => {
   if (check(req, res)){ return };
   const login = req.session.login;
@@ -80,10 +80,12 @@ router.get('/:blogId', csrfProtection, (req, res, next) => {
   });
 });
 
+// ログインユーザーとブログ作者が同一かチェック
 function isMine(req, blog) {
   return blog && parseInt(req.session.login.userId) === parseInt(blog.createdBy);
 };
 
+// ログインユーザーが管理者かチェック
 function isAdmin(req, blog) {
   return blog && parseInt(req.session.login.userId) === 1;
 };
@@ -111,7 +113,7 @@ router.get('/:blogId/edit', csrfProtection, (req, res, next) => {
   });
 });
 
-// ブログを編集・削除
+// ブログの編集・削除処理
 router.post('/:blogId', csrfProtection, (req, res, next) => {
   Blog.findOne({
     where: {

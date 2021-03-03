@@ -1,8 +1,6 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
-var Blog = require('../models/blog');
 var Comment = require('../models/comment');
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
@@ -25,10 +23,12 @@ router.post('/:blogId/users/:userId/comments/new', csrfProtection, (req, res, ne
   });
 });
 
+// ログインユーザーとコメントの投稿者が同一かチェック
 function myComment(req, comment) {
   return comment && parseInt(req.session.login.userId) === parseInt(comment.userId);
 };
 
+// コメントを削除するユーザーが監理者かチェック
 function isAdmin(req, comment) {
   return comment && parseInt(req.session.login.userId) === 1;
 };

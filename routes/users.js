@@ -5,7 +5,7 @@ const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 var User = require('../models/user');
 
-/* GET users listing. */
+// ユーザーの新規登録画面の表示
 router.get('/add', csrfProtection, function(req, res, next) {
   res.render('users/add', {
     title: 'ユーザー登録',
@@ -14,6 +14,7 @@ router.get('/add', csrfProtection, function(req, res, next) {
   });
 });
 
+// ユーザーの新規登録処理
 router.post('/add', csrfProtection, (req, res, next) => {
   const password = req.body.pass ? bcrypt.hashSync(req.body.pass, 10) : null;
   User.create({
@@ -32,6 +33,7 @@ router.post('/add', csrfProtection, (req, res, next) => {
   });
 });
 
+// ログインページの表示
 router.get('/login', csrfProtection, (req, res, next) => {
   res.render('users/login', {
     title: 'ログイン',
@@ -40,6 +42,7 @@ router.get('/login', csrfProtection, (req, res, next) => {
   });
 });
 
+// ログイン処理
 router.post('/login', csrfProtection, (req, res, next) => {
   User.findOne({
     where: {
@@ -67,6 +70,7 @@ router.post('/login', csrfProtection, (req, res, next) => {
   })
 });
 
+// ログアウトページの表示
 router.get('/logout', (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {

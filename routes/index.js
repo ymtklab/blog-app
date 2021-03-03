@@ -5,7 +5,7 @@ var check = require('./check');
 var Blog = require('../models/blog');
 var User = require('../models/user');
 
-/* GET home page. */
+// ホームページ・ブログのタイトル一覧表示
 router.get('/', function(req, res, next) {
   if (check(req, res)){ return };
   Blog.findAll({
