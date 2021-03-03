@@ -11,4 +11,4 @@ URL:
 - 管理者はすべての記事・コメントを削除できる
 
 # 利用技術
-　バックエンドの言語には Node.js 、フレームワークは express を利用しました。アプリケーションはHerokuにデプロイし、データベースはHerokuのpostgresqlアドオンを使いました。データベースの処理は、sequlize というNode.jsのORMを用いました。
+　バックエンドの言語には **Node.js** 、フレームワークは **express** を利用しました。アプリケーションは**Heroku**にデプロイし、データベースはHerokuの**postgresql**アドオンを使いました。データベースの処理は、**sequlize** というNode.jsのORMを用いました。
