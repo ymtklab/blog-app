@@ -19,5 +19,5 @@ URL: https://still-dawn-24988.herokuapp.com/
 - ORM(データベース)
     - Sequelize
     - Postgresql
-- テンプレート
-    - Pug
+- デプロイ環境
+    - Heroku
