@@ -3,6 +3,8 @@
 
 URL: https://still-dawn-24988.herokuapp.com/
 
+N予備校(https://www.nnn.ed.nico/)のプログラミング入門講座で学習した内容を確認するために作成しました。
+
 # 機能一覧
 - ユーザー登録・ログイン/ログアウトができる
 - ブログ記事を投稿できる
@@ -21,3 +23,6 @@ URL: https://still-dawn-24988.herokuapp.com/
     - Postgresql
 - デプロイ環境
     - Heroku
+
+# 備考
+私の学習記録
