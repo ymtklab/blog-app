@@ -25,4 +25,4 @@ URL: https://still-dawn-24988.herokuapp.com/
     - Heroku
 
 # 備考
-私の学習記録
+[私の学習記録](https://ymtklab.github.io/ymtk-homepage/)
