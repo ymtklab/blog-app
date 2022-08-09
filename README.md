@@ -24,5 +24,5 @@ URL: https://still-dawn-24988.herokuapp.com/
 - デプロイ環境
     - Heroku
 
-# 備考
-[私の学習記録](https://ymtklab.github.io/ymtk-homepage/)
+<!-- # 備考
+[私の学習記録](https://ymtklab.github.io/ymtk-homepage/) -->
