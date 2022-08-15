@@ -1,9 +1,7 @@
 # シンプルなブログ
 ユーザー登録・ログインをすることで利用することができるブログです。
 
-URL: https://still-dawn-24988.herokuapp.com/
-
-[N予備校](https://www.nnn.ed.nico/)のプログラミング入門講座で学習した内容を確認するために作成しました。
+URL : https://still-dawn-24988.herokuapp.com/
 
 # 機能一覧
 - ユーザー登録・ログイン/ログアウトができる
@@ -15,11 +13,11 @@ URL: https://still-dawn-24988.herokuapp.com/
 
 # 利用技術
 - バックエンド言語
-    - Node.js
+    - [Node.js](https://nodejs.org/en/)
 - フレームワーク
-    - Express
+    - [Express](https://expressjs.com/)
 - ORM(データベース)
-    - Sequelize
+    - [Sequelize](https://sequelize.org/)
     - Postgresql
 - デプロイ環境
     - Heroku
